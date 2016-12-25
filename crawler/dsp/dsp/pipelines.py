@@ -8,6 +8,12 @@
 
 class DspPipeline(object):
     def process_item(self, item, spider):
+        self.url=item['url']
+        self.dictfile=open('site.txt','a')
+        self.dictfile.write(self.url)
+        self.dictfile.write("\n")
+        self.dictfile.close()
+
         #self.eurl=item['url'].replace('/','_').replace(":","")
         #self.filename=self.eurl+''
         #self.file=open(self.filename,'wb')
