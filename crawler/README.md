@@ -1,4 +1,4 @@
-#A distributed sample crawler baed on scrapy-redis
+#A distributed crawler baed on scrapy-redis
 
 ##Required Lib:
 
