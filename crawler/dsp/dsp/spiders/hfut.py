@@ -3,6 +3,8 @@ import scrapy
 import re
 import traceback
 import requests
+import MySQLdb
+import hashlib
 from scrapy.selector import HtmlXPathSelector
 from scrapy_redis.spiders import RedisSpider
 from scrapy.selector import Selector
@@ -10,7 +12,7 @@ from scrapy.http import Request
 from dsp.items import DspItem
 
 from scrapy import optional_features
-optional_features.remove('boto')           #NEEDED BY MACINTOSH
+#optional_features.remove('boto')           #NEEDED BY MACINTOSH
 
 class HfutSpider(RedisSpider):
     name = "dsp"
@@ -33,26 +35,39 @@ class HfutSpider(RedisSpider):
             webcontent['url']=response.url
             yield webcontent
             lklist=response.xpath('//a/@href').extract()
+            lknum=len(lklist)
+            purl=response.url
+
+            try:
+                conn = MySQLdb.connect(host='192.168.2.100', user='root', passwd='asdfgh', db='url', charset='utf8')
+                ss = conn.cursor()
+                seq = 'insert into graphtable(uh,nout,nin) values (%s,%s,0)'
+                para = (hashlib.md5(purl).hexdigest()[8:-8], lknum)
+                ss.execute(seq, para)
+                conn.commit()
+                conn.close()
+            except:
+                pass
+
             print("VIEWED::::::",response.url,"        ")
             for lk in lklist:
                 lurl=response.urljoin(lk).encode('utf-8')
-                #print("FOUNDLINK-----",lurl,"        ")
+
+                try:
+                    fu =  response.url
+                    su =  lurl
+                    conn = MySQLdb.connect(host='192.168.2.100', user='root', passwd='asdfgh', db='url', charset='utf8')
+                    ss = conn.cursor()
+                    seq = 'insert into lnktable(fid,sid) values (%s,%s)'
+                    para = (hashlib.md5(fu).hexdigest()[8:-8], hashlib.md5(su).hexdigest()[8:-8])
+                    ss.execute(seq, para)
+                    conn.commit()
+                    conn.close()
+                except:
+                    pass
+
                 yield Request(lurl, callback=self.parse)
-                # try:
-                #     buf=cStringIO.StringIO()
-                #     c=pycurl.Curl()
-                #     c.setopt(c.NOBODY,1)
-                #     c.setopt(c.HEADERFUNCTION,buf.write)
-                #     c.setopt(c.CONNECTTIMEOUT,3)
-                #     c.setopt(c.TIMEOUT,3)
-                #     c.setopt(c.URL, lurl)
-                #     c.perform()
-                #     RespType=buf.getvalue()
-                #     print("CRAWL-----", lurl,"-------", "        ")
-                #     if('text/html' in RespType):
-                #         yield Request(lurl,callback=self.parse)
-                # except:
-                #     traceback.print_exc()
+
         except:
             pass
 

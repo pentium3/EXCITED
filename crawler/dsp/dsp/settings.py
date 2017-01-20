@@ -5,7 +5,7 @@ BOT_NAME = 'dsp'
 SPIDER_MODULES = ['dsp.spiders']
 NEWSPIDER_MODULE = 'dsp.spiders'
 
-DEPTH_LIMIT = 1
+DEPTH_LIMIT = 10
 
 DOWNLOAD_DELAY = 2
 
@@ -26,7 +26,7 @@ SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
 #SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
 #SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderStack'
 REDIE_URL = None
-REDIS_HOST = '172.18.72.5'
+REDIS_HOST = '192.168.2.118'
 REDIS_PORT = 6379
 DUPEFILTER_CLASS = 'scrapy_redis.dupefilter.RFPDupeFilter'
 

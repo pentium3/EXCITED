@@ -5,6 +5,8 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
+import MySQLdb
+import hashlib
 
 class DspPipeline(object):
     def process_item(self, item, spider):
@@ -14,10 +16,13 @@ class DspPipeline(object):
         self.dictfile.write("\n")
         self.dictfile.close()
 
-        #self.eurl=item['url'].replace('/','_').replace(":","")
-        #self.filename=self.eurl+''
-        #self.file=open(self.filename,'wb')
-        #print("WRITEFILE::::::",self.filename)
-        #self.file.write(item['content'])
-        #self.file.close()
+        uu =  self.url
+        conn = MySQLdb.connect(host='192.168.2.100', user='root', passwd='asdfgh', db='url', charset='utf8')
+        ss = conn.cursor()
+        seq = 'insert into urltable(url,uh) values (%s,%s)'
+        para = (uu, hashlib.md5(uu).hexdigest()[8:-8])
+        ss.execute(seq, para)
+        conn.commit()
+        conn.close()
+
         return item
