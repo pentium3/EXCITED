@@ -26,7 +26,7 @@ SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
 #SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
 #SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderStack'
 REDIE_URL = None
-REDIS_HOST = '192.168.2.118'
+REDIS_HOST = '192.168.100.106'
 REDIS_PORT = 6379
 DUPEFILTER_CLASS = 'scrapy_redis.dupefilter.RFPDupeFilter'
 

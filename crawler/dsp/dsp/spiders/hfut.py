@@ -16,10 +16,10 @@ from scrapy import optional_features
 
 class HfutSpider(RedisSpider):
     name = "dsp"
-    allowed_domains = ["sdu.edu.cn"]
+    allowed_domains = ["hfut.edu.cn"]
     redis_key = 'dsp start_urls'
     start_urls = (
-        'http://www.sdu.edu.cn',
+        'http://www.hfut.edu.cn',
     )
 
     def start_requests(self):
@@ -39,7 +39,7 @@ class HfutSpider(RedisSpider):
             purl=response.url
 
             try:
-                conn = MySQLdb.connect(host='192.168.2.100', user='root', passwd='asdfgh', db='url', charset='utf8')
+                conn = MySQLdb.connect(host='192.168.100.102', user='pdv', passwd='asdfgh', db='url', charset='utf8')
                 ss = conn.cursor()
                 seq = 'insert into graphtable(uh,nout,nin) values (%s,%s,0)'
                 para = (hashlib.md5(purl).hexdigest()[8:-8], lknum)
@@ -56,7 +56,7 @@ class HfutSpider(RedisSpider):
                 try:
                     fu =  response.url
                     su =  lurl
-                    conn = MySQLdb.connect(host='192.168.2.100', user='root', passwd='asdfgh', db='url', charset='utf8')
+                    conn = MySQLdb.connect(host='192.168.100.102', user='pdv', passwd='asdfgh', db='url', charset='utf8')
                     ss = conn.cursor()
                     seq = 'insert into lnktable(fid,sid) values (%s,%s)'
                     para = (hashlib.md5(fu).hexdigest()[8:-8], hashlib.md5(su).hexdigest()[8:-8])
