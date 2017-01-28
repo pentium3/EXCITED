@@ -8,6 +8,8 @@ scrapy-redis
 
 requests
 
+MySQLdb
+
 ##Reference:
 
 https://github.com/LiuXingMing/SinaSpider
