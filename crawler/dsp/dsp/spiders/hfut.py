@@ -38,16 +38,16 @@ class HfutSpider(RedisSpider):
             lknum=len(lklist)
             purl=response.url
 
-            try:
-                conn = MySQLdb.connect(host='192.168.100.102', user='pdv', passwd='asdfgh', db='url', charset='utf8')
-                ss = conn.cursor()
-                seq = 'insert into graphtable(uh,nout,nin) values (%s,%s,0)'
-                para = (hashlib.md5(purl).hexdigest()[8:-8], lknum)
-                ss.execute(seq, para)
-                conn.commit()
-                conn.close()
-            except:
-                pass
+            # try:
+            #     conn = MySQLdb.connect(host='192.168.100.102', user='pdv', passwd='asdfgh', db='url', charset='utf8')
+            #     ss = conn.cursor()
+            #     seq = 'insert into graphtable(uh,nout,nin) values (%s,%s,0)'
+            #     para = (hashlib.md5(purl).hexdigest()[8:-8], lknum)
+            #     ss.execute(seq, para)
+            #     conn.commit()
+            #     conn.close()
+            # except:
+            #     pass
 
             print("VIEWED::::::",response.url,"        ")
             for lk in lklist:
@@ -56,10 +56,20 @@ class HfutSpider(RedisSpider):
                 try:
                     fu =  response.url
                     su =  lurl
+                    fh=hashlib.md5(fu).hexdigest()[8:-8]
+                    sh=hashlib.md5(su).hexdigest()[8:-8]
                     conn = MySQLdb.connect(host='192.168.100.102', user='pdv', passwd='asdfgh', db='url', charset='utf8')
                     ss = conn.cursor()
+                    seq = "select uid from urltable where uh='%s'" % (fh)
+                    ss.execute(seq)
+                    ll = ss.fetchall()
+                    fid = ll[0][0]
+                    seq = "select uid from urltable where uh='%s'" % (sh)
+                    ss.execute(seq)
+                    ll = ss.fetchall()
+                    sid = ll[0][0]
                     seq = 'insert into lnktable(fid,sid) values (%s,%s)'
-                    para = (hashlib.md5(fu).hexdigest()[8:-8], hashlib.md5(su).hexdigest()[8:-8])
+                    para = (str(fid),str(sid))
                     ss.execute(seq, para)
                     conn.commit()
                     conn.close()
