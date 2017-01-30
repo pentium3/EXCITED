@@ -17,7 +17,7 @@ class DspPipeline(object):
         self.dictfile.close()
 
         uu =  self.url
-        conn = MySQLdb.connect(host='192.168.100.102', user='pdv', passwd='asdfgh', db='url', charset='utf8')
+        conn = MySQLdb.connect(host='192.168.0.101', user='pdv', passwd='asdfgh', db='url', charset='utf8')
         ss = conn.cursor()
         seq = 'insert into urltable(url,uh) values (%s,%s)'
         para = (uu, hashlib.md5(uu).hexdigest()[8:-8])
