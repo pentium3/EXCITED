@@ -38,16 +38,16 @@ class HfutSpider(RedisSpider):
             lknum=len(lklist)
             purl=response.url
 
-            # try:
-            #     conn = MySQLdb.connect(host='192.168.0.101', user='pdv', passwd='asdfgh', db='url', charset='utf8')
-            #     ss = conn.cursor()
-            #     seq = 'insert into graphtable(uh,nout,nin) values (%s,%s,0)'
-            #     para = (hashlib.md5(purl).hexdigest()[8:-8], lknum)
-            #     ss.execute(seq, para)
-            #     conn.commit()
-            #     conn.close()
-            # except:
-            #     pass
+            try:
+                conn = MySQLdb.connect(host='192.168.0.101', user='pdv', passwd='asdfgh', db='url', charset='utf8')
+                ss = conn.cursor()
+                seq = 'insert into graphtable(uh,nout,nin) values (%s,%s,0)'
+                para = (hashlib.md5(purl).hexdigest()[8:-8], lknum)
+                ss.execute(seq, para)
+                conn.commit()
+                conn.close()
+            except:
+                pass
 
             print("VIEWED::::::",response.url,"        ")
             for lk in lklist:
