@@ -36,13 +36,23 @@ class HfutSpider(RedisSpider):
             yield webcontent
             lklist=response.xpath('//a/@href').extract()
             lknum=len(lklist)
+
             purl=response.url
+            fh = hashlib.md5(purl).hexdigest()[8:-8]
+            conn = MySQLdb.connect(host='192.168.0.101', user='pdv', passwd='asdfgh', db='url', charset='utf8')
+            ss = conn.cursor()
+            seq = "select uid from urltable where uh='%s'" % (fh)
+            ss.execute(seq)
+            ll = ss.fetchall()
+            fid = ll[0][0]
+            conn.commit()
+            conn.close()
 
             try:
                 conn = MySQLdb.connect(host='192.168.0.101', user='pdv', passwd='asdfgh', db='url', charset='utf8')
                 ss = conn.cursor()
-                seq = 'insert into graphtable(uh,nout,nin) values (%s,%s,0)'
-                para = (hashlib.md5(purl).hexdigest()[8:-8], lknum)
+                seq = 'insert into graphtable(uh,uid,nout,nin) values (%s,%s,%s,0)'
+                para = (fh, fid, lknum)
                 ss.execute(seq, para)
                 conn.commit()
                 conn.close()
@@ -54,16 +64,10 @@ class HfutSpider(RedisSpider):
                 lurl=response.urljoin(lk).encode('utf-8')
 
                 try:
-                    fu =  response.url
                     su =  lurl
-                    fh=hashlib.md5(fu).hexdigest()[8:-8]
                     sh=hashlib.md5(su).hexdigest()[8:-8]
                     conn = MySQLdb.connect(host='192.168.0.101', user='pdv', passwd='asdfgh', db='url', charset='utf8')
                     ss = conn.cursor()
-                    seq = "select uid from urltable where uh='%s'" % (fh)
-                    ss.execute(seq)
-                    ll = ss.fetchall()
-                    fid = ll[0][0]
                     seq = "select uid from urltable where uh='%s'" % (sh)
                     ss.execute(seq)
                     ll = ss.fetchall()

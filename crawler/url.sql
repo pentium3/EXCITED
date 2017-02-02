@@ -25,6 +25,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `graphtable`;
 CREATE TABLE `graphtable` (
   `uh` char(16) NOT NULL,
+  `uid` char(16) NOT NULL,
   `nout` int(11) NOT NULL,
   `nin` int(11) NOT NULL,
   PRIMARY KEY (`uh`),
